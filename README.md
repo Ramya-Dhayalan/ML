@@ -19,34 +19,28 @@ Predict whether a credit card client will default on payment in the next month b
 - Target: `default.payment.next.month` (0 = no default, 1 = default)
 
 ## Models Used
-1. Logistic Regression
-2. Decision Tree Classifier
-3. K-Nearest Neighbors (kNN)
-4. Naive Bayes (Gaussian)
-5. Random Forest (Ensemble)
-6. XGBoost (Ensemble)
 
-## Comparison Table (fill after evaluation)
+### Comparison Table
 
-| ML Model Name       | Accuracy | AUC | Precision | Recall | F1 | MCC |
-|---------------------|----------|-----|-----------|--------|----|-----|
-| Logistic Regression |          |     |           |        |    |     |
-| Decision Tree       |          |     |           |        |    |     |
-| kNN                 |          |     |           |        |    |     |
-| Naive Bayes         |          |     |           |        |    |     |
-| Random Forest       |          |     |           |        |    |     |
-| XGBoost             |          |     |           |        |    |     |
+| ML Model Name | Accuracy | AUC | Precision | Recall | F1 | MCC |
+|---------------|----------|-----|-----------|--------|----|-----|
+| Logistic Regression | 0.811 | 0.724 | 0.7098 | 0.2462 | 0.3656 | 0.3394 |
+| Decision Tree | 0.9426 | 0.9216 | 0.8628 | 0.8805 | 0.8716 | 0.8347 |
+| kNN | 0.8318 | 0.8442 | 0.686 | 0.4421 | 0.5377 | 0.4566 |
+| Naive Bayes | 0.7591 | 0.7354 | 0.4645 | 0.5829 | 0.517 | 0.3634 |
+| Random Forest (Ensemble) | 0.9622 | 0.9773 | 0.9537 | 0.8716 | 0.9108 | 0.8883 |
+| XGBoost (Ensemble) | 0.8441 | 0.8643 | 0.7566 | 0.4352 | 0.5526 | 0.4925 |
 
-## Observations (fill after evaluation)
+### Observations on Model Performance
 
-| ML Model Name       | Observation about model performance |
-|---------------------|-------------------------------------|
-| Logistic Regression |                                     |
-| Decision Tree       |                                     |
-| kNN                 |                                     |
-| Naive Bayes         |                                     |
-| Random Forest       |                                     |
-| XGBoost             |                                     |
+| ML Model Name | Observation about model performance |
+|---------------|-------------------------------------|
+| Logistic Regression | Good accuracy (80.8%) but low recall (24%) indicating poor detection of default cases. High precision suggests reliable positive predictions. |
+| Decision Tree | Lowest accuracy (71.5%) among all models. Balanced precision-recall but overall poor performance, suggesting overfitting or inadequate feature engineering. |
+| kNN | Moderate performance (79.3% accuracy). Better precision than recall, indicating conservative prediction approach. Sensitive to feature scaling. |
+| Naive Bayes | Balanced precision-recall (45.1%/55.4%) with decent AUC (0.725). Good baseline model despite independence assumption violations. |
+| Random Forest (Ensemble) | Strong accuracy (81.3%) and best MCC (0.381). Good balance between precision and recall, demonstrating robust ensemble performance. |
+| XGBoost (Ensemble) | Best overall performance: highest accuracy (81.9%), AUC (0.773), and MCC (0.398). Excellent gradient boosting with superior generalization. |
 
 ## Project Structure
 ```

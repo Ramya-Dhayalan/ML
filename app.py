@@ -15,7 +15,34 @@ from sklearn.metrics import (
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-st.set_page_config(page_title="Credit Default Classifier", layout="wide")
+# Custom CSS for better styling
+st.markdown("""
+<style>
+    .main-header {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1f77b4;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .metric-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 1.5rem;
+        border-radius: 10px;
+        color: white;
+        margin: 0.5rem 0;
+    }
+    .stDataFrame {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .sidebar .sidebar-content {
+        background: linear-gradient(180deg, #f0f2f6 0%, #e8ecf1 100%);
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.set_page_config(page_title="Credit Default Classifier", layout="wide", initial_sidebar_state="expanded")
 
 MODELS_DIR = "model"
 PREPROCESSOR_PATH = os.path.join(MODELS_DIR, "preprocessor.joblib")
@@ -24,8 +51,8 @@ MODEL_FILES = {
     "Decision Tree": os.path.join(MODELS_DIR, "decision_tree.joblib"),
     "kNN": os.path.join(MODELS_DIR, "knn.joblib"),
     "Naive Bayes": os.path.join(MODELS_DIR, "naive_bayes.joblib"),
-    "Random Forest": os.path.join(MODELS_DIR, "random_forest.joblib"),
-    "XGBoost": os.path.join(MODELS_DIR, "xgboost.joblib"),
+    "Random Forest\n(Ensemble)": os.path.join(MODELS_DIR, "random_forest.joblib"),
+    "XGBoost\n(Ensemble)": os.path.join(MODELS_DIR, "xgboost.joblib"),
 }
 
 
@@ -93,26 +120,97 @@ def plot_confusion_matrix(y_true, y_pred):
 
 
 def show_classification_report(y_true, y_pred):
-    report = classification_report(y_true, y_pred, zero_division=0)
-    st.text(report)
+    report = classification_report(y_true, y_pred, zero_division=0, output_dict=True)
+    
+    # Convert to DataFrame for better display
+    report_df = pd.DataFrame(report).transpose()
+    
+    # Round the values for better readability
+    report_df = report_df.round(3)
+    
+    # Remove the 'support' row from the middle and add it as a separate metric
+    support_row = report_df.loc['support'] if 'support' in report_df.index else None
+    if 'support' in report_df.index:
+        report_df = report_df.drop('support')
+    
+    # Display the classification report as a styled table
+    st.markdown("#### 📊 Performance by Class")
+    
+    # Add class labels for better understanding
+    class_labels = []
+    for idx in report_df.index:
+        if idx == '0':
+            class_labels.append('No Default (0)')
+        elif idx == '1':
+            class_labels.append('Default (1)')
+        else:
+            class_labels.append(idx.title())
+    
+    report_df.insert(0, 'Class', class_labels)
+    
+    # Display metrics with better formatting
+    st.dataframe(report_df, use_container_width=True)
+    
+    # Display support information separately
+    if support_row is not None:
+        st.markdown("#### 📈 Class Distribution")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("🟢 No Default (Class 0)", f"{int(support_row['0']):,}")
+        with col2:
+            st.metric("🔴 Default (Class 1)", f"{int(support_row['1']):,}")
+    
+    # Add summary statistics
+    if 'accuracy' in report:
+        st.markdown("#### 🎯 Overall Performance")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("✅ Accuracy", f"{report['accuracy']:.3f}")
+        with col2:
+            st.metric("⚖️ Macro Avg F1", f"{report_df.loc['macro avg', 'f1-score']:.3f}")
+        with col3:
+            st.metric("📊 Weighted Avg F1", f"{report_df.loc['weighted avg', 'f1-score']:.3f}")
 
 
-st.title("Credit Default Prediction – Evaluation App")
+st.markdown('<h1 class="main-header">🏦 Credit Default Prediction System</h1>', unsafe_allow_html=True)
 st.markdown(
-    "Upload a test CSV (schema matching training data), select a model, and view metrics."
+    "### 📊 Upload test data and evaluate ML models for credit risk assessment"
 )
 
 with st.sidebar:
-    st.header("Controls")
-    uploaded_file = st.file_uploader("Upload Test CSV", type=["csv"]) 
+    st.markdown("## 🎛️ Control Panel")
+    
+    # File upload with custom styling
+    uploaded_file = st.file_uploader(
+        "📁 Upload Test CSV", 
+        type=["csv"],
+        help="Upload a CSV file with the same structure as training data"
+    )
+    
+    st.markdown("### ⚙️ Configuration")
     default_label = "default.payment.next.month"
-    label_col = st.text_input("Label/Target column", value=default_label)
+    label_col = st.text_input(
+        "🎯 Target Column", 
+        value=default_label,
+        help="Name of the target variable column"
+    )
+    
+    st.markdown("### 🤖 Model Selection")
     model_name = st.selectbox(
-        "Select Model",
+        "Choose ML Model",
         list(MODEL_FILES.keys()),
         index=0,
+        help="Select the machine learning model for evaluation"
     )
-    evaluate_btn = st.button("Evaluate")
+    
+    # Evaluate button with enhanced styling
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        evaluate_btn = st.button(
+            "🚀 Run Evaluation", 
+            type="primary",
+            use_container_width=True
+        )
 
 preproc, models = load_artifacts()
 
@@ -122,23 +220,44 @@ with col1:
     if uploaded_file is not None:
         try:
             df = pd.read_csv(uploaded_file)
-            st.subheader("Dataset Preview")
-            st.dataframe(df.head())
-            st.caption(f"Rows: {df.shape[0]}, Columns: {df.shape[1]}")
+            st.markdown("### 📋 Dataset Preview")
+            st.dataframe(df.head(), use_container_width=True)
+            
+            # Dataset info with better styling
+            col_info1, col_info2, col_info3 = st.columns(3)
+            with col_info1:
+                st.metric("📊 Rows", f"{df.shape[0]:,}")
+            with col_info2:
+                st.metric("📁 Columns", df.shape[1])
+            with col_info3:
+                st.metric("🎯 Target", label_col)
+                
         except Exception as e:
-            st.error(f"Failed to read CSV: {e}")
+            st.error(f"❌ Failed to read CSV: {e}")
             st.stop()
     else:
-        st.info("Please upload a test CSV to proceed.")
+        st.info("👆 Please upload a test CSV file to proceed with evaluation.")
 
 with col2:
-    st.subheader("Artifacts Status")
-    st.write("Preprocessor:", "✅ Found" if preproc is not None else "❌ Not found")
+    st.markdown("### 🔧 System Status")
+    
+    # Preprocessor status
+    preproc_status = "✅ Ready" if preproc is not None else "❌ Missing"
+    st.markdown(f"**Preprocessor:** {preproc_status}")
+    
+    # Models status
     avail = [name for name in MODEL_FILES if name in models]
     missing = [name for name in MODEL_FILES if name not in models]
-    st.write("Models available:", ", ".join(avail) if avail else "None")
+    
+    st.markdown(f"**Available Models:** {len(avail)}/6")
+    if avail:
+        for model in avail:
+            st.markdown(f"✅ {model}")
+    
     if missing:
-        st.caption("Missing: " + ", ".join(missing))
+        st.markdown("**Missing Models:**")
+        for model in missing:
+            st.markdown(f"❌ {model}")
 
 st.divider()
 
@@ -194,19 +313,19 @@ if evaluate_btn:
 
     metrics = compute_metrics(y, y_pred, y_proba)
 
-    st.subheader("Metrics")
+    st.markdown("### 🎯 Model Performance Metrics")
+    
     mdf = pd.DataFrame([metrics])
+    # Add model name as first column
+    mdf.insert(0, "ML Model Name", model_name)
     # Reorder columns for readability
-    mcols = ["Accuracy", "AUC", "Precision", "Recall", "F1", "MCC"]
+    mcols = ["ML Model Name", "Accuracy", "AUC", "Precision", "Recall", "F1", "MCC"]
     mdf = mdf[[c for c in mcols if c in mdf.columns]]
-    st.dataframe(mdf)
+    # Remove the index column
+    st.dataframe(mdf, use_container_width=True, hide_index=True)
 
-    st.subheader("Confusion Matrix")
+    st.markdown("### 🎭 Confusion Matrix")
     plot_confusion_matrix(y, y_pred)
 
-    st.subheader("Classification Report")
+    st.markdown("### 📄 Classification Report")
     show_classification_report(y, y_pred)
-
-st.caption(
-    "Note: App expects test data only. Train models offline with src/train.py and upload only test split for evaluation."
-)
