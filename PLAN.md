@@ -29,7 +29,7 @@ This document is a step-by-step plan to complete the assignment by the deadline 
   - Minimum 500 instances
 - Chosen dataset: Default of Credit Card Clients (UCI/Kaggle)
   - URL: https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset
-  - Typical file: `UCI_Credit_Card.csv`
+  - Typical file: `Credit_Card.csv`
   - Target column: `default.payment.next.month` (binary 0/1)
   - Instances: ~30,000; Features: ≥ 23 (meets assignment constraints)
 - Action: Proceed with repository scaffolding and preprocessing.

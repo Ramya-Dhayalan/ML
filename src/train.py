@@ -89,7 +89,7 @@ def train_and_evaluate(csv_path: str, target: str = DEFAULT_TARGET, outdir: str 
 
 def main():
     parser = argparse.ArgumentParser(description="Train six classifiers and save artifacts")
-    parser.add_argument("--data", required=True, help="Path to UCI_Credit_Card.csv")
+    parser.add_argument("--data", required=True, help="Path to Credit_Card.csv")
     parser.add_argument("--target", default=DEFAULT_TARGET, help="Target column name")
     parser.add_argument("--outdir", default=DEFAULT_OUTDIR, help="Output directory for artifacts")
     parser.add_argument("--test_size", type=float, default=0.2, help="Test size fraction")

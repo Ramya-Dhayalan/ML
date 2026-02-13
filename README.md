@@ -4,7 +4,7 @@ This repository implements six ML classification models on the "Default of Credi
 
 - Live App: <ADD AFTER DEPLOYMENT>
 - Dataset: https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset
-- Typical file: `UCI_Credit_Card.csv`
+- Typical file: `Credit_Card.csv`
 - Target column: `default.payment.next.month` (binary 0/1)
 
 ---
@@ -86,7 +86,7 @@ pip install -r requirements.txt
 ```
 3) (Offline) Train models and save artifacts
 ```
-python -m src.train --data /path/to/UCI_Credit_Card.csv --target default.payment.next.month
+python -m src.train --data /path/to/Credit_Card.csv --target default.payment.next.month
 ```
 4) Run the Streamlit app
 ```
