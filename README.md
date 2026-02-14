@@ -7,8 +7,6 @@ This repository implements six ML classification models on the "Default of Credi
 - Typical file: `Credit_Card.csv`
 - Target column: `default.payment.next.month` (binary 0/1)
 
----
-
 ## Problem Statement
 Predict whether a credit card client will default on payment in the next month based on demographic, credit history, and billing/payment features.
 
@@ -19,6 +17,12 @@ Predict whether a credit card client will default on payment in the next month b
 - Target: `default.payment.next.month` (0 = no default, 1 = default)
 
 ## Models Used
+1. Logistic Regression
+2. Decision Tree Classifier
+3. K-Nearest Neighbors (kNN)
+4. Naive Bayes (Gaussian)
+5. Random Forest (Ensemble)
+6. XGBoost (Ensemble)
 
 ### Comparison Table
 
@@ -65,8 +69,6 @@ project-root/
 │  ├─ models.py                    # model builders
 │  ├─ evaluate.py                  # metrics utilities
 │  └─ train.py                     # train/evaluate/save
-└─ notebooks/                      # optional for EDA
-```
 
 ## How to Run Locally
 1) Create and activate a virtual environment
