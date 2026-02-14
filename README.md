@@ -2,7 +2,7 @@
 
 This repository implements six ML classification models on the "Default of Credit Card Clients" dataset and provides an interactive Streamlit app for evaluation and visualization.
 
-- Live App: <ADD AFTER DEPLOYMENT>
+- Live App: https://jypf5mufanmwfbnbq5mtx5.streamlit.app/
 - Dataset: https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset
 - Typical file: `Credit_Card.csv`
 - Target column: `default.payment.next.month` (binary 0/1)
