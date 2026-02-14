@@ -1,4 +1,4 @@
-# Credit Default Prediction – ML Assignment 2 (BITS WILP)
+# Credit Default Classifier
 
 This repository implements six ML classification models on the "Default of Credit Card Clients" dataset and provides an interactive Streamlit app for evaluation and visualization.
 
