@@ -35,12 +35,12 @@ Predict whether a credit card client will default on payment in the next month b
 
 | ML Model Name | Observation about model performance |
 |---------------|-------------------------------------|
-| Logistic Regression | Good accuracy (80.8%) but low recall (24%) indicating poor detection of default cases. High precision suggests reliable positive predictions. |
-| Decision Tree | Lowest accuracy (71.5%) among all models. Balanced precision-recall but overall poor performance, suggesting overfitting or inadequate feature engineering. |
-| kNN | Moderate performance (79.3% accuracy). Better precision than recall, indicating conservative prediction approach. Sensitive to feature scaling. |
-| Naive Bayes | Balanced precision-recall (45.1%/55.4%) with decent AUC (0.725). Good baseline model despite independence assumption violations. |
-| Random Forest (Ensemble) | Strong accuracy (81.3%) and best MCC (0.381). Good balance between precision and recall, demonstrating robust ensemble performance. |
-| XGBoost (Ensemble) | Best overall performance: highest accuracy (81.9%), AUC (0.773), and MCC (0.398). Excellent gradient boosting with superior generalization. |
+| Logistic Regression | Good accuracy (81.1%) but low recall (24.6%) indicating poor detection of default cases. High precision (71.0%) suggests reliable positive predictions. |
+| Decision Tree | Excellent performance with highest accuracy (94.3%) and AUC (92.2%). Strong balance between precision (86.3%) and recall (88.1%), showing effective classification. |
+| kNN | Strong performance with high accuracy (83.2%) and excellent AUC (84.4%). Good precision (68.6%) but moderate recall (44.2%), indicating conservative prediction approach. |
+| Naive Bayes | Moderate performance with accuracy (75.9%) and decent AUC (73.5%). Balanced precision-recall (46.5%/58.3%) showing reasonable baseline performance. |
+| Random Forest (Ensemble) | Outstanding performance with highest accuracy (96.2%) and AUC (97.7%). Excellent precision (95.4%) with strong recall (87.2%), demonstrating superior ensemble capabilities. |
+| XGBoost (Ensemble) | Strong performance with good accuracy (84.4%) and AUC (86.4%). High precision (75.7%) but lower recall (43.5%), suggesting more conservative positive predictions. |
 
 ## Project Structure
 ```
@@ -70,20 +70,20 @@ project-root/
 
 ## How to Run Locally
 1) Create and activate a virtual environment
-```
-python3 -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
 ```
 2) Install dependencies
-```
+```powershell
 pip install -r requirements.txt
 ```
 3) (Offline) Train models and save artifacts
-```
-python -m src.train --data /path/to/Credit_Card.csv --target default.payment.next.month
+```powershell
+python -m src.train --data Credit_Card.csv --target default.payment.next.month
 ```
 4) Run the Streamlit app
-```
+```powershell
 streamlit run app.py
 ```
 
